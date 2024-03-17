@@ -10,7 +10,7 @@ public class Seat {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "seat_id")
-    private Long seatId;
+    private Integer seatId;
 
     @Column(name = "seat_number")
     private String seatNumber;
@@ -21,7 +21,7 @@ public class Seat {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "seat_floor_id", referencedColumnName = "floor_id")
-    private Floor floor;
+    private Floor seatFloorId;
 
     @Column(name = "seat_booked")
     private boolean seatBooked;
@@ -31,21 +31,21 @@ public class Seat {
     public Seat() {
     }
 
-    public Seat(Long seatId, String seatNumber, SeatType seatType, Floor floor, boolean seatBooked) {
+    public Seat(Integer seatId, String seatNumber, SeatType seatType, Floor seatFloorId, boolean seatBooked) {
         this.seatId = seatId;
         this.seatNumber = seatNumber;
         this.seatType = seatType;
-        this.floor = floor;
+        this.seatFloorId = seatFloorId;
         this.seatBooked = seatBooked;
     }
 
     // Getters and Setters
 
-    public Long getSeatId() {
+    public Integer getSeatId() {
         return seatId;
     }
 
-    public void setSeatId(Long seatId) {
+    public void setSeatId(Integer seatId) {
         this.seatId = seatId;
     }
 
@@ -65,12 +65,12 @@ public class Seat {
         this.seatType = seatType;
     }
 
-    public Floor getFloor() {
-        return floor;
+    public Floor getSeatFloorId() {
+        return seatFloorId;
     }
 
-    public void setFloor(Floor floor) {
-        this.floor = floor;
+    public void setSeatFloorId(Floor seatFloorId) {
+        this.seatFloorId = seatFloorId;
     }
 
     public boolean getSeatBooked() {

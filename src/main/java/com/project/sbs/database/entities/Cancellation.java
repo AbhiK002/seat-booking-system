@@ -14,10 +14,10 @@ public class Cancellation {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cancellation_user_id", referencedColumnName = "user_id")
-    private User user;
+    private User cancellationUserId;
 
     @Column(name = "cancellation_booking_id")
-    private Integer booking;
+    private Integer cancellationBookingId;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "cancellation_status")
@@ -27,10 +27,10 @@ public class Cancellation {
     public Cancellation() {
     }
 
-    public Cancellation(Integer cancellationId, User user, Integer booking, RequestStatus cancellationStatus) {
+    public Cancellation(Integer cancellationId, User cancellationUserId, Integer cancellationBookingId, RequestStatus cancellationStatus) {
         this.cancellationId = cancellationId;
-        this.user = user;
-        this.booking = booking;
+        this.cancellationUserId = cancellationUserId;
+        this.cancellationBookingId = cancellationBookingId;
         this.cancellationStatus = cancellationStatus;
     }
 
@@ -42,20 +42,20 @@ public class Cancellation {
         this.cancellationId = cancellationId;
     }
 
-    public User getUser() {
-        return user;
+    public User getCancellationUserId() {
+        return cancellationUserId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setCancellationUserId(User user) {
+        this.cancellationUserId = user;
     }
 
-    public Integer getBooking() {
-        return booking;
+    public Integer getCancellationBookingId() {
+        return cancellationBookingId;
     }
 
-    public void setBooking(Integer booking) {
-        this.booking = booking;
+    public void setCancellationBookingId(Integer booking) {
+        this.cancellationBookingId = booking;
     }
 
     public RequestStatus getCancellationStatus() {
