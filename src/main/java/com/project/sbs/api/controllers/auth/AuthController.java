@@ -1,9 +1,11 @@
 package com.project.sbs.api.controllers.auth;
 
 import com.project.sbs.api.requests.RegisterRequest;
+import com.project.sbs.api.requests.VerifyEmailRequest;
 import com.project.sbs.api.responses.ErrorResponse;
 import com.project.sbs.api.responses.LoginSuccessfulResponse;
 import com.project.sbs.api.responses.SimpleResponse;
+import com.project.sbs.api.responses.SuccessBooleanResponse;
 import com.project.sbs.api.services.auth.AuthService;
 import com.project.sbs.api.services.auth.EmailService;
 import com.project.sbs.api.services.auth.JwtService;
@@ -45,6 +47,10 @@ public class AuthController {
             return new ErrorResponse("No empty fields allowed");
         }
 
+        if (!emailService.isValidEmail(user_email)) {
+            return new ErrorResponse("Invalid email");
+        }
+
         if (authService.userAlreadyExists(user_email)) {
             return new ErrorResponse("Email already registered");
         }
@@ -69,5 +75,20 @@ public class AuthController {
         else {
             return new ErrorResponse("Some error occurred");
         }
+    }
+
+    @PostMapping("/verify-email")
+    public SimpleResponse verifyEmail(
+            @RequestBody VerifyEmailRequest emailRequest
+    ) {
+        String email = emailRequest.getEmail();
+
+        if (email == null || !emailService.isValidEmail(email)) {
+            return new ErrorResponse("Invalid email");
+        }
+
+        int OTP = emailService.generateOTP();
+        emailService.sendEmail(email, OTP);
+        return new SuccessBooleanResponse(true);
     }
 }

@@ -22,4 +22,8 @@ public class EmailService {
         String emailBody = "The verification OTP for Seat Booking System is: " + OTP;
         return true;
     }
+
+    public boolean isValidEmail(String email) {
+        return email.matches("^\\S+@\\w+(\\.[\\w]+)+$");
+    }
 }
