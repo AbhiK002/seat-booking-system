@@ -22,7 +22,8 @@ public class User {
     public User() {
     }
 
-    public User(String userFullname, String userEmail, String userPassword) {
+    public User(Integer userId, String userFullname, String userEmail, String userPassword) {
+        this.userId = userId;
         this.userFullname = userFullname;
         this.userEmail = userEmail;
         this.userPassword = userPassword;
