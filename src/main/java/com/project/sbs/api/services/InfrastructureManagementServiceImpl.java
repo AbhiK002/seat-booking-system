@@ -7,6 +7,8 @@ import com.project.sbs.database.repositories.OfficeRepository;
 import org.springframework.stereotype.Service;
 
 @Service
+
+
 public class InfrastructureManagementServiceImpl implements InfrastructureManagementService{
 
     private final OfficeRepository officeRepository;
@@ -21,7 +23,8 @@ public class InfrastructureManagementServiceImpl implements InfrastructureManage
     }
 
     @Override
-    public Floor createFloor(Integer floorId, Integer officeId) {
-        return officeRepository.save(new Floor(0,floorId,officeId));
+    public Floor createFloor(Integer floorNumber, Office officeId) {
+
+        return officeRepository.save(new Floor(0,floorNumber,officeId));
     }
 }

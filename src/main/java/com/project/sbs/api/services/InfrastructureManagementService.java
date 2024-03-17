@@ -6,5 +6,5 @@ import com.project.sbs.database.entities.Office;
 public interface InfrastructureManagementService {
     Office createOffice(String OfficeName);
 
-    Floor createFloor(String floorId, String officeId);
+    Floor createFloor(Integer floorId, Office officeId);
 }

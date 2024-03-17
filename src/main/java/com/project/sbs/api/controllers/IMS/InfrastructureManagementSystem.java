@@ -24,9 +24,9 @@ public class InfrastructureManagementSystem {
     }
 
     @PostMapping("/floor")
-    public CreateFloorResponse CreateFloor(@RequestHeader("Authorization") String token,@RequestParam("floor_id") String floorId,@RequestParam("office_id") String officeId)
+    public CreateFloorResponse CreateFloor(@RequestHeader("Authorization") String token,@RequestParam("floor_id") String floorId,@RequestParam("office_id") Office officeId)
     {
-        Floor floor =infrastructureManagementService.createFloor(floorId,officeId)
+        Floor floor =infrastructureManagementService.createFloor(floorId,officeId);
         return new CreateFloorResponse(floor,true);
     }
 }
