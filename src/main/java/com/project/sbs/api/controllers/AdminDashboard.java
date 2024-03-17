@@ -1,6 +1,6 @@
 package com.project.sbs.api.controllers;
 
-import com.project.sbs.JpaRepository.BookingsRepo;
+import com.project.sbs.database.repositories.BookingRepository;
 import com.project.sbs.api.responses.BookingResponse;
 import com.project.sbs.database.entities.Booking;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +16,7 @@ public class AdminDashboard {
     public BookingResponse getbookings(@RequestHeader("Authorization") String token)
     {
         int the_id=1;
-        List<Booking> data= BookingsRepo.findById(the_id);
+        List<Booking> data= BookingRepository.findById(the_id);
         BookingResponse response=new BookingResponse();
         response.setData(data);
         response.setSuccessField(true);
