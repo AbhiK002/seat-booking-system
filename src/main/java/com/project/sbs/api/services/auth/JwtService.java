@@ -18,7 +18,7 @@ public class JwtService {
         return Jwts.builder()
                 .header().add("userId", userId)
                 .and()
-                .expiration(new Date(System.currentTimeMillis() + 20 * 1000)) // 12 hours expiration
+                .expiration(new Date(System.currentTimeMillis() + 12 * 3600 * 1000)) // 12 hours expiration
                 .signWith(SignatureAlgorithm.HS256, jwtGenKey)
                 .compact();
     }
