@@ -1,6 +1,7 @@
 package com.project.sbs.api.services;
 
 
+import com.project.sbs.database.entities.Floor;
 import com.project.sbs.database.entities.Office;
 import com.project.sbs.database.repositories.OfficeRepository;
 import org.springframework.stereotype.Service;
@@ -17,5 +18,10 @@ public class InfrastructureManagementServiceImpl implements InfrastructureManage
     @Override
     public Office createOffice(String OfficeName) {
         return officeRepository.save(new Office(0, OfficeName));
+    }
+
+    @Override
+    public Floor createFloor(Integer floorId, Integer officeId) {
+        return officeRepository.save(new Floor(0,floorId,officeId));
     }
 }
