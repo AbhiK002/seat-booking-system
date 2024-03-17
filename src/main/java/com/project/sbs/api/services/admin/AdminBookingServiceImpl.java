@@ -1,5 +1,6 @@
-package com.project.sbs.api.services;
+package com.project.sbs.api.services.admin;
 
+import com.project.sbs.api.services.admin.AdminBookingService;
 import com.project.sbs.database.entities.Booking;
 import com.project.sbs.database.repositories.BookingRepository;
 import org.springframework.stereotype.Service;

@@ -19,14 +19,18 @@ public class User {
     @Column(name = "user_password", length = 70)
     private String userPassword;
 
+    @Column(name = "user_roles")
+    private String userRoles;
+
     public User() {
     }
 
-    public User(Integer userId, String userFullname, String userEmail, String userPassword) {
+    public User(Integer userId, String userFullname, String userEmail, String userPassword, String userRoles) {
         this.userId = userId;
         this.userFullname = userFullname;
         this.userEmail = userEmail;
         this.userPassword = userPassword;
+        this.userRoles = userRoles;
     }
 
     public Integer getUserId() {
@@ -59,5 +63,13 @@ public class User {
 
     public void setUserPassword(String userPassword) {
         this.userPassword = userPassword;
+    }
+
+    public String getUserRoles() {
+        return userRoles;
+    }
+
+    public void setUserRoles(String userRoles) {
+        this.userRoles = userRoles;
     }
 }

@@ -1,4 +1,4 @@
-package com.project.sbs.api.services;
+package com.project.sbs.api.services.admin;
 
 import com.project.sbs.database.entities.Floor;
 import com.project.sbs.database.entities.Office;

@@ -1,7 +1,6 @@
-package com.project.sbs.api.controllers;
+package com.project.sbs.api.controllers.admin;
 
-import com.project.sbs.api.services.AdminBookingService;
-import com.project.sbs.database.repositories.BookingRepository;
+import com.project.sbs.api.services.admin.AdminBookingService;
 import com.project.sbs.api.responses.BookingResponse;
 import com.project.sbs.database.entities.Booking;
 import org.springframework.web.bind.annotation.GetMapping;
