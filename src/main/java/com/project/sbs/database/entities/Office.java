@@ -16,8 +16,17 @@ public class Office {
     public Office() {
     }
 
-    public Office(String officeName) {
+    public Office(Integer officeId, String officeName) {
+        this.officeId = officeId;
         this.officeName = officeName;
+    }
+
+    public Integer getOfficeId() {
+        return officeId;
+    }
+
+    public void setOfficeId(Integer officeId) {
+        this.officeId = officeId;
     }
 
     public String getOfficeName() {
