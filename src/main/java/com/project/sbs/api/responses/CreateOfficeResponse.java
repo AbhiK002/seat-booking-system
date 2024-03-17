@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.project.sbs.database.entities.Office;
 
 public class CreateOfficeResponse {
-    @JsonProperty
-    Office office=new Office();
+    @JsonProperty("office")
+    private Office office;
 
     @JsonProperty("success")
     private boolean successField;
