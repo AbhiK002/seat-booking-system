@@ -13,15 +13,17 @@ public class Floor {
     @Column(name="floor_number")
     private Integer floorNumber;
 
-    @Column(name="floor_office_id")
-    private Integer FloorOfficeId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "floor_office_id", referencedColumnName = "office_id")
+    private Office floorOfficeId;
 
     public Floor() {
     }
 
-    public Floor(Integer floorNumber, Integer floorOfficeId) {
+    public Floor(Integer floorId, Integer floorNumber, Office floorOfficeId) {
+        this.floorId = floorId;
         this.floorNumber = floorNumber;
-        FloorOfficeId = floorOfficeId;
+        this.floorOfficeId = floorOfficeId;
     }
 
     public Integer getFloorId() {
@@ -40,11 +42,11 @@ public class Floor {
         this.floorNumber = floorNumber;
     }
 
-    public Integer getFloorOfficeId() {
-        return FloorOfficeId;
+    public Office getFloorOfficeId() {
+        return floorOfficeId;
     }
 
-    public void setFloorOfficeId(Integer floorOfficeId) {
-        FloorOfficeId = floorOfficeId;
+    public void setFloorOfficeId(Office floorOfficeId) {
+        this.floorOfficeId = floorOfficeId;
     }
 }

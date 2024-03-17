@@ -1,8 +1,10 @@
 package com.project.sbs.database.entities;
 
+import com.project.sbs.config.enums.SeatType;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "seats")
 public class Seat {
 
     @Id
@@ -13,10 +15,12 @@ public class Seat {
     @Column(name = "seat_number")
     private String seatNumber;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "seat_type")
-    private String seatType;
+    private SeatType seatType;
 
-    @Column(name = "seat_floor_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "seat_floor_id", referencedColumnName = "floor_id")
     private Floor floor;
 
     @Column(name = "seat_booked")
@@ -27,7 +31,8 @@ public class Seat {
     public Seat() {
     }
 
-    public Seat(String seatNumber, String seatType, Floor floor, boolean seatBooked) {
+    public Seat(Long seatId, String seatNumber, SeatType seatType, Floor floor, boolean seatBooked) {
+        this.seatId = seatId;
         this.seatNumber = seatNumber;
         this.seatType = seatType;
         this.floor = floor;
@@ -52,11 +57,11 @@ public class Seat {
         this.seatNumber = seatNumber;
     }
 
-    public String getSeatType() {
+    public SeatType getSeatType() {
         return seatType;
     }
 
-    public void setSeatType(String seatType) {
+    public void setSeatType(SeatType seatType) {
         this.seatType = seatType;
     }
 
@@ -68,7 +73,7 @@ public class Seat {
         this.floor = floor;
     }
 
-    public boolean isSeatBooked() {
+    public boolean getSeatBooked() {
         return seatBooked;
     }
 

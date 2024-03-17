@@ -1,18 +1,19 @@
 package com.project.sbs.database.entities;
 
+import com.project.sbs.config.enums.RequestStatus;
 import jakarta.persistence.*;
 
-
-
 @Entity
+@Table(name = "cancellations")
 public class Cancellation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "cancellation_id")
-    private Long cancellationId;
+    private Integer cancellationId;
 
-    @Column(name = "cancellation_user_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cancellation_user_id", referencedColumnName = "user_id")
     private User user;
 
     @Column(name = "cancellation_booking_id")
@@ -20,26 +21,24 @@ public class Cancellation {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "cancellation_status")
-    private String cancellationStatus;
+    private RequestStatus cancellationStatus;
 
     // Constructors, getters, and setters
-
     public Cancellation() {
     }
 
-    public Cancellation(User user, Integer booking, String cancellationStatus) {
+    public Cancellation(Integer cancellationId, User user, Integer booking, RequestStatus cancellationStatus) {
+        this.cancellationId = cancellationId;
         this.user = user;
         this.booking = booking;
         this.cancellationStatus = cancellationStatus;
     }
 
-    // Getters and Setters
-
-    public Long getCancellationId() {
+    public Integer getCancellationId() {
         return cancellationId;
     }
 
-    public void setCancellationId(Long cancellationId) {
+    public void setCancellationId(Integer cancellationId) {
         this.cancellationId = cancellationId;
     }
 
@@ -59,11 +58,11 @@ public class Cancellation {
         this.booking = booking;
     }
 
-    public String getCancellationStatus() {
+    public RequestStatus getCancellationStatus() {
         return cancellationStatus;
     }
 
-    public void setCancellationStatus(String cancellationStatus) {
+    public void setCancellationStatus(RequestStatus cancellationStatus) {
         this.cancellationStatus = cancellationStatus;
     }
 }
