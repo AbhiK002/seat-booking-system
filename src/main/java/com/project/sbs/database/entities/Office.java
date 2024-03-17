@@ -2,6 +2,7 @@ package com.project.sbs.database.entities;
 
 import jakarta.persistence.*;
 
+@Entity
 @Table(name = "offices")
 public class Office {
     @Id
@@ -11,4 +12,19 @@ public class Office {
 
     @Column(name = "office_name")
     private String officeName;
+
+    public Office() {
+    }
+
+    public Office(String officeName) {
+        this.officeName = officeName;
+    }
+
+    public String getOfficeName() {
+        return officeName;
+    }
+
+    public void setOfficeName(String officeName) {
+        this.officeName = officeName;
+    }
 }
