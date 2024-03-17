@@ -11,25 +11,32 @@ public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
 
     private final JwtService jwtService;
+    private final PasswordService passwordService;
 
     @Autowired
-    public AuthServiceImpl(UserRepository userRepository, JwtService jwtService) {
+    public AuthServiceImpl(UserRepository userRepository, JwtService jwtService, PasswordService passwordService) {
         this.userRepository = userRepository;
         this.jwtService = jwtService;
+        this.passwordService = passwordService;
     }
 
     @Override
     public User registerNewUser(String userFullName, String userEmail, String userPassword) {
-        // hash the password
+        userPassword = passwordService.hashPassword(userPassword);
+
         return userRepository.save(new User(0, userFullName, userEmail, userPassword, UserRole.USER.name()));
+    }
+
+    @Override
+    public boolean userAlreadyExists(String userEmail) {
+        return getUserDetails(userEmail) != null;
     }
 
     @Override
     public User loginUser(String userEmail, String userPassword) {
         User gotUser = getUserDetails(userEmail);
         if (gotUser != null) {
-            // hash the password
-            if (gotUser.getUserPassword().equals(userPassword)) {
+            if (passwordService.passwordMatchesHash(userPassword, gotUser.getUserPassword())) {
                 return gotUser;
             }
         }
@@ -40,7 +47,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public User autoLoginUser(String token) {
         if (jwtService.isTokenValid(token)) {
-            return getUserDetails(jwtService.getIdFromValidToken(token));
+            return getUserDetails(jwtService.getIdFromToken(token));
         }
 
         return null;
@@ -54,10 +61,5 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public User getUserDetails(String userEmail) {
         return userRepository.getUserByUserEmail(userEmail);
-    }
-
-    @Override
-    public boolean userExists(Integer userId) {
-        return userRepository.existsById(userId);
     }
 }

@@ -8,5 +8,5 @@ public interface AuthService {
     User autoLoginUser(String token);
     User getUserDetails(Integer userId);
     User getUserDetails(String userEmail);
-    boolean userExists(Integer userId);
+    boolean userAlreadyExists(String userEmail);
 }

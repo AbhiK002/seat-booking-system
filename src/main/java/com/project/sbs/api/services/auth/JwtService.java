@@ -36,17 +36,24 @@ public class JwtService {
         }
         catch (JwtException e) {
             // jwt corrupted or expired
-            System.out.println(e.getMessage());
             return false;
         }
     }
 
-    public Integer getIdFromValidToken(String token) {
-        Jwt<?,?> jwt = Jwts.parser()
-                .setSigningKey(jwtGenKey)
-                .build()
-                .parse(token);
+    public Integer getIdFromToken(String token) {
+        Jwt<?,?> jwt;
 
-        return (Integer) jwt.getHeader().get("userId");
+        try {
+            jwt = Jwts.parser()
+                    .setSigningKey(jwtGenKey)
+                    .build()
+                    .parse(token);
+
+            return (Integer) jwt.getHeader().get("userId");
+        }
+        catch (JwtException e) {
+            // jwt corrupted or expired
+            return null;
+        }
     }
 }
