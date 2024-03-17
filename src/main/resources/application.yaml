@@ -7,3 +7,4 @@ spring:
     url: DATABASEURI
     username: YOURUSERNAME
     password: YOURPASSWORD
+    driver-class-name: org.postgresql.Driver
