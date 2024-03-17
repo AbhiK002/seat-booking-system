@@ -12,15 +12,15 @@ import java.util.List;
 @RestController
 public class AdminDashboard {
 
-    @GetMapping("/bookings")
-    public BookingResponse getbookings(@RequestHeader("Authorization") String token)
-    {
-        int the_id=1;
-        List<Booking> data= BookingRepository.findById(the_id);
-        BookingResponse response=new BookingResponse();
-        response.setData(data);
-        response.setSuccessField(true);
-        return response;
-    }
+//    @GetMapping("/bookings")
+//    public BookingResponse getbookings(@RequestHeader("Authorization") String token)
+//    {
+//        int the_id=1;
+//        List<Booking> data= BookingRepository.findById(the_id);
+//        BookingResponse response=new BookingResponse();
+//        response.setData(data);
+//        response.setSuccessField(true);
+//        return response;
+//    }
 
 }
