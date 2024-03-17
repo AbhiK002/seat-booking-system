@@ -5,19 +5,19 @@ import com.project.sbs.database.entities.Booking;
 
 import java.util.List;
 
-public class SampleResponse {
-    @JsonProperty("field-name")
+public class BookingResponse {
+    @JsonProperty("data")
     private List<Booking> data;
 
     @JsonProperty("success")
     private boolean successField;
 
-    public SampleResponse(List<Booking> data, boolean successField) {
+    public BookingResponse(List<Booking> data, boolean successField) {
         this.data = data;
         this.successField = successField;
     }
 
-    public SampleResponse() {
+    public BookingResponse() {
     }
 
     public List<Booking> getData() {
