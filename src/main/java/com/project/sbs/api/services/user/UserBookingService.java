@@ -32,9 +32,9 @@ public class UserBookingService {
         return  floorRepository.getFloorsByOfficeId(office);
     }
 
-    public List<Seat> getAllSeatsById(Integer floorId) {
+    public List<Seat> getAllSeatsWithFloorId(Integer floorId) {
         Floor floor=floorRepository.findById(floorId).orElse(null);
         if(floor==null)return null;
-        return seatRepository.findSeatsBySeatFloorId(floor);
+        return seatRepository.getSeatsByFloorId(floor);
     }
 }

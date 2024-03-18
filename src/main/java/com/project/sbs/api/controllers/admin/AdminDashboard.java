@@ -1,5 +1,7 @@
 package com.project.sbs.api.controllers.admin;
 
+import com.project.sbs.api.responses.AnyListResponse;
+import com.project.sbs.api.responses.SimpleResponse;
 import com.project.sbs.api.services.admin.AdminBookingService;
 import com.project.sbs.api.responses.BookingsListResponse;
 import com.project.sbs.database.entities.Booking;
@@ -18,10 +20,10 @@ public class AdminDashboard {
     }
 
     @GetMapping("/bookings")
-    public BookingsListResponse getbookings(@RequestHeader("Authorization") String token)
+    public SimpleResponse getbookings(@RequestHeader("Authorization") String token)
     {
         List<Booking> bookings = adminBookingService.getAllPendingBookings();
-        return new BookingsListResponse(bookings, true);
+        return new AnyListResponse<Booking>(bookings, true);
     }
 
 }

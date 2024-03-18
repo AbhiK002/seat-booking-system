@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface SeatRepository extends JpaRepository<Seat, Integer> {
-    @Query("select f from Seat f where f.seatFloorId= :floorId ")
-    List<Seat> findSeatsBySeatFloorId(Floor floorId);
+
+    @Query("select f from Seat f where f.seatFloorId= :officeId ")
+    List<Seat> getSeatsByFloorId(Floor officeId);
 }

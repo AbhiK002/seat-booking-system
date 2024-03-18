@@ -33,28 +33,26 @@ public class BookingController {
         return new AnyListResponse<Office>(offices,true);
     }
 
-    @GetMapping("/floors/{office_id}")
+    @GetMapping("/floors/{office-id}")
     public SimpleResponse getFloors(
             @RequestHeader("Authorization") String token,
-            @PathVariable("office_id") Integer officeId
+            @PathVariable("office-id") Integer officeId
             )
     {
         List<Floor> floors= userBookingService.getAllFloorsWithOfficeId(officeId);
         if(floors==null)return new ErrorResponse("office does not exists");
         return new AnyListResponse<Floor>(floors,true);
     }
-
-    @GetMapping("/seats/{floor_id}")
+//
+    @GetMapping("/seats/{floor-id}")
     public SimpleResponse getSeats(
             @RequestHeader("Authorization") String token,
-            @PathVariable("floor_id") Integer floorId) {
-        List<Seat> seats = userBookingService.getAllSeatsById(floorId);
-        if (seats == null) {
-            return new ErrorResponse("Floor does not exist");
-        } else {
-            System.out.println(seats);
-            return new AnyListResponse<>(seats, true);
-        }
+            @PathVariable("floor-id") Integer floorId
+    )
+    {
+        List<Seat> seats=userBookingService.getAllSeatsWithFloorId(floorId);
+        if(seats==null)return new ErrorResponse("Floor does not exist ");
+        return new AnyListResponse<Seat>(seats,true);
     }
 
 
