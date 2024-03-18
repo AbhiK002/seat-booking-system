@@ -118,7 +118,7 @@ public class AuthController {
     @PostMapping("/autologin")
     public SimpleResponse autoLogin(@RequestHeader("Authorization") String token) {
         if (jwtService.isTokenValid(token)) {
-            User loggedInUser = authService.getUserDetails(jwtService.getIdFromToken(token));
+            User loggedInUser = authService.autoLoginUser(token);
 
             return new LoginSuccessfulResponse(
                     new UserData(loggedInUser),
