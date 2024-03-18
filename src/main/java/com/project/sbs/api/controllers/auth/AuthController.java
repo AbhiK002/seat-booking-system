@@ -38,10 +38,18 @@ public class AuthController {
     public SimpleResponse registerUser(
             @RequestBody RegisterRequest userDetails
     ) {
-        String user_fullname = userDetails.getUser_fullname().trim();
-        String user_email = userDetails.getUser_email().trim();
+        String user_fullname = userDetails.getUser_fullname();
+        String user_email = userDetails.getUser_email();
         String user_password = userDetails.getUser_password();
-        String user_otp = userDetails.getUser_otp().trim();
+        String user_otp = userDetails.getUser_otp();
+
+        if (user_fullname==null || user_email==null || user_password==null || user_otp==null) {
+            return new ErrorResponse("Something went wrong (null)");
+        }
+
+        user_fullname = user_fullname.trim();
+        user_email = user_email.trim();
+        user_otp = user_otp.trim();
 
         if (
                 user_fullname.isEmpty()
@@ -96,8 +104,14 @@ public class AuthController {
     public SimpleResponse login(
             @RequestBody LoginRequest loginRequest
     ) {
-        String user_email = loginRequest.getUser_email().trim();
+        String user_email = loginRequest.getUser_email();
         String user_password = loginRequest.getUser_password();
+
+        if (user_email == null || user_password == null) {
+            return new ErrorResponse("Something went wrong (null)");
+        }
+
+        user_email = user_email.trim();
 
         if (user_password.isEmpty() || user_email.isEmpty()) {
             return new ErrorResponse("Empty fields are not allowed");
