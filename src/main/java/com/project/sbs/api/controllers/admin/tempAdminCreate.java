@@ -23,8 +23,8 @@ public class tempAdminCreate {
     @PostMapping("/admin")
     public String createAdmin()
     {
-        String password= passwordService.hashPassword("123456789");
-        User admin=userRepository.save(new User(0,"ali hassan","ali@example.com",password,"ADMIN"));
-        return "Admin created ";
+        String password= passwordService.hashPassword("admin123");
+        User admin=userRepository.save(new User(0,"Admin","admin@admin.com",password,"USER,ADMIN"));
+        return "Admin created";
     }
 }

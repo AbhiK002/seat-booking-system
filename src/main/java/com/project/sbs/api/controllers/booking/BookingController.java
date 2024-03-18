@@ -9,14 +9,12 @@ import com.project.sbs.database.entities.Floor;
 import com.project.sbs.database.entities.Office;
 import com.project.sbs.database.entities.Seat;
 import com.project.sbs.database.repositories.OfficeRepository;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@CrossOrigin
 public class BookingController {
 
     private final UserBookingService userBookingService;
@@ -47,13 +45,14 @@ public class BookingController {
     @GetMapping("/seats/{floor_id}")
     public SimpleResponse getSeats(
             @RequestHeader("Authorization") String token,
-            @PathVariable("floor_id") Integer floorId) {
+            @PathVariable("floor_id") Integer floorId
+    ) {
         List<Seat> seats = userBookingService.getAllSeatsById(floorId);
         if (seats == null) {
             return new ErrorResponse("Floor does not exist");
         } else {
             System.out.println(seats);
-            return new AnyListResponse<>(seats, true);
+            return new AnyListResponse<Seat>(seats, true);
         }
     }
 

@@ -3,6 +3,7 @@ package com.project.sbs.database.repositories;
 import com.project.sbs.database.entities.Booking;
 import com.project.sbs.database.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
