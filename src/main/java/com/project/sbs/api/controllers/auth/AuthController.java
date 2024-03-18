@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@CrossOrigin(origins = "**")
 public class AuthController {
     AuthService authService;
     JwtService jwtService;
@@ -26,6 +27,11 @@ public class AuthController {
         this.authService = authService;
         this.jwtService = jwtService;
         this.emailService = emailService;
+    }
+
+    @GetMapping("/hello")
+    public String getHello() {
+        return "Hello Sukhad";
     }
 
     @PostMapping("/register")
@@ -119,6 +125,9 @@ public class AuthController {
     public SimpleResponse autoLogin(@RequestHeader("Authorization") String token) {
         if (jwtService.isTokenValid(token)) {
             User loggedInUser = authService.autoLoginUser(token);
+            if (loggedInUser == null) {
+                return new ErrorResponse("Login expired, please log in again");
+            }
 
             return new LoginSuccessfulResponse(
                     new UserData(loggedInUser),
