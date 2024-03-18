@@ -1,5 +1,6 @@
 package com.project.sbs.api.services.user;
 
+import com.project.sbs.database.entities.Booking;
 import com.project.sbs.database.entities.Floor;
 import com.project.sbs.database.entities.Office;
 import com.project.sbs.database.entities.Seat;

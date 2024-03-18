@@ -111,4 +111,19 @@ public class BookingController {
                 true
         );
     }
+
+    @GetMapping("seat/details/{floor_id}")
+    public SimpleResponse getSeatDetails(
+            @RequestHeader("Authorization") String token,
+            @PathVariable("floor_id") Integer floorId
+    )
+    {
+        Integer userId = authService.getUserIdIfTokenValid(token);
+        if (userId == null) {
+            return new ErrorResponse("Login expired, please login again");
+        }
+        List<Booking> bookings=bookingPageService.getDetails(floorId);
+        if(bookings==null)return new ErrorResponse("Floor does not exist ");
+        return new AnyListResponse<Booking>(bookings,true);
+    }
 }
