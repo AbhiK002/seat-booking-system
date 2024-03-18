@@ -62,4 +62,9 @@ public class AuthServiceImpl implements AuthService {
     public User getUserDetails(String userEmail) {
         return userRepository.getUserByUserEmail(userEmail);
     }
+
+    @Override
+    public Integer getUserIdIfTokenValid(String token) {
+        return jwtService.getIdFromToken(token);
+    }
 }

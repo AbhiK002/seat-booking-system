@@ -34,6 +34,11 @@ public class AuthController {
         return "Hello Sukhad";
     }
 
+    @GetMapping("/")
+    public String getRootMessage() {
+        return "Welcome to Office Nest API!";
+    }
+
     @PostMapping("/register")
     public SimpleResponse registerUser(
             @RequestBody RegisterRequest userDetails
