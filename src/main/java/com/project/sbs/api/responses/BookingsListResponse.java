@@ -28,7 +28,7 @@ public class BookingsListResponse {
         this.data = data;
     }
 
-    public boolean isSuccessField() {
+    public boolean getSuccessField() {
         return successField;
     }
 
