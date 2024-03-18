@@ -17,6 +17,6 @@ public class AdminBookingServiceImpl implements AdminBookingService {
 
     @Override
     public List<Booking> getAllPendingBookings() {
-        return bookingRepository.findAll();
+        return bookingRepository.findAllPendingBookings();
     }
 }
