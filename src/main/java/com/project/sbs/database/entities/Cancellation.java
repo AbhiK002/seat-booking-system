@@ -12,7 +12,7 @@ public class Cancellation {
     @Column(name = "cancellation_id")
     private Integer cancellationId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "cancellation_user_id", referencedColumnName = "user_id")
     private User cancellationUserId;
 

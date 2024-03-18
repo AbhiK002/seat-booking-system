@@ -4,13 +4,15 @@ public class BookSeatRequest {
     private Integer floor_id;
     private Integer seat_id;
     private String start_datetime;
-    private Integer duration;
+    private String end_datetime;
 
-    public BookSeatRequest(Integer floor_id, Integer seat_id, String start_datetime, Integer duration) {
+    public BookSeatRequest() {}
+
+    public BookSeatRequest(Integer floor_id, Integer seat_id, String start_datetime, String end_datetime) {
         this.floor_id = floor_id;
         this.seat_id = seat_id;
         this.start_datetime = start_datetime;
-        this.duration = duration;
+        this.end_datetime = end_datetime;
     }
 
     public Integer getFloor_id() {
@@ -37,11 +39,11 @@ public class BookSeatRequest {
         this.start_datetime = start_datetime;
     }
 
-    public Integer getDuration() {
-        return duration;
+    public String getEnd_datetime() {
+        return end_datetime;
     }
 
-    public void setDuration(Integer duration) {
-        this.duration = duration;
+    public void setEnd_datetime(String end_datetime) {
+        this.end_datetime = end_datetime;
     }
 }

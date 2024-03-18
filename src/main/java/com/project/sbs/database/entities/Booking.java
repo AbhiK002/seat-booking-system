@@ -12,15 +12,15 @@ public class Booking {
     @Column(name = "booking_id")
     private Integer bookingId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "booking_user_id", referencedColumnName = "user_id")
     private User bookingUserId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "booking_floor_id", referencedColumnName = "floor_id")
     private Floor bookingFloorId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "booking_seat_id", referencedColumnName = "seat_id")
     private Seat bookingSeatId;
 
