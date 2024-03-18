@@ -2,6 +2,7 @@ package com.project.sbs.api.controllers.user;
 
 import com.project.sbs.api.responses.AnyListResponse;
 import com.project.sbs.api.responses.AnyObjectResponse;
+import com.project.sbs.api.responses.SimpleResponse;
 import com.project.sbs.api.services.auth.AuthService;
 import com.project.sbs.api.services.user.UserDashboardService;
 import com.project.sbs.database.entities.Booking;
@@ -23,21 +24,21 @@ public class UserDashboardController {
     }
 
     @GetMapping("/bookings")
-    public AnyListResponse<Booking> getBookings(
+    public SimpleResponse getBookings(
             @RequestHeader("Authorization") String token
     ) {
         return null;
     }
 
     @GetMapping("/cancellations")
-    public AnyListResponse<Cancellation> getCancellations(
+    public SimpleResponse getCancellations(
             @RequestHeader("Authorization") String token
     ) {
         return null;
     }
 
     @PostMapping("/cancellation")
-    public AnyObjectResponse<Cancellation> makeCancellation(
+    public SimpleResponse makeCancellation(
             @RequestHeader("Authorization") String token
     ) {
         return null;
