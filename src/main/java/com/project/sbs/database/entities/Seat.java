@@ -18,7 +18,7 @@ public class Seat {
     @Column(name = "seat_type")
     private SeatType seatType;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "seat_floor_id", referencedColumnName = "floor_id")
     private Floor seatFloorId;
 

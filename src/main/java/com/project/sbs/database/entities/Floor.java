@@ -13,7 +13,7 @@ public class Floor {
     @Column(name="floor_number")
     private Integer floorNumber;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "floor_office_id", referencedColumnName = "office_id")
     private Office floorOfficeId;
 
