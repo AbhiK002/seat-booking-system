@@ -3,6 +3,8 @@ package com.project.sbs.api.requests;
 public class CancellationRequest {
     private Integer booking_id;
 
+    public CancellationRequest() {}
+
     public CancellationRequest(Integer booking_id) {
         this.booking_id = booking_id;
     }
