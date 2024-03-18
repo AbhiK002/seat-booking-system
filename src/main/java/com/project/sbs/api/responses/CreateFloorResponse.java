@@ -3,7 +3,7 @@ package com.project.sbs.api.responses;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.project.sbs.database.entities.Floor;
 
-public class CreateFloorResponse {
+public class CreateFloorResponse extends SimpleResponse {
     @JsonProperty("Floor")
     private Floor floor;
 

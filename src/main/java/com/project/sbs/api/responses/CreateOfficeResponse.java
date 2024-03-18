@@ -3,7 +3,7 @@ package com.project.sbs.api.responses;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.project.sbs.database.entities.Office;
 
-public class CreateOfficeResponse {
+public class CreateOfficeResponse extends SimpleResponse {
     @JsonProperty("office")
     private Office office;
 
