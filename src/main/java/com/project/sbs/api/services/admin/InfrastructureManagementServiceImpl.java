@@ -51,7 +51,7 @@ public class InfrastructureManagementServiceImpl implements InfrastructureManage
 
         Floor floor=floorRepository.findById(seatRequest.getFloor_id()).orElse(null);
         if(floor==null)return null;
-        return  seatRepository.save(new Seat(0,seatRequest.getSeat_Number(),seatRequest.getSeatType(),floor,false));
+        return  seatRepository.save(new Seat(0,seatRequest.getSeat_number(),seatRequest.getSeat_type(),floor,false));
     }
 
     @Override

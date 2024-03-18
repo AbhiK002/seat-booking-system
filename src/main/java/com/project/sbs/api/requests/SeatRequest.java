@@ -3,39 +3,40 @@ package com.project.sbs.api.requests;
 import com.project.sbs.config.enums.SeatType;
 
 public class SeatRequest {
-    private Integer Floor_id;
-    private String Seat_Number;
-    private SeatType seatType;
+    private Integer floor_id;
+    private String seat_number;
+    private SeatType seat_type;
 
     public SeatRequest() {
     }
 
-    public SeatRequest(String seat_Number, SeatType seatType) {
-        Seat_Number = seat_Number;
-        this.seatType = seatType;
+    public SeatRequest(Integer floor_id, String seat_number, SeatType seat_type) {
+        this.floor_id = floor_id;
+        this.seat_number = seat_number;
+        this.seat_type = seat_type;
     }
 
     public Integer getFloor_id() {
-        return Floor_id;
+        return floor_id;
     }
 
     public void setFloor_id(Integer floor_id) {
-        Floor_id = floor_id;
+        this.floor_id = floor_id;
     }
 
-    public String getSeat_Number() {
-        return Seat_Number;
+    public String getSeat_number() {
+        return seat_number;
     }
 
-    public void setSeat_Number(String seat_Number) {
-        Seat_Number = seat_Number;
+    public void setSeat_number(String seat_number) {
+        this.seat_number = seat_number;
     }
 
-    public SeatType getSeatType() {
-        return seatType;
+    public SeatType getSeat_type() {
+        return seat_type;
     }
 
-    public void setSeatType(SeatType seatType) {
-        this.seatType = seatType;
+    public void setSeat_type(SeatType seat_type) {
+        this.seat_type = seat_type;
     }
 }
