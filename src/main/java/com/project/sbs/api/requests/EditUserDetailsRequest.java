@@ -3,6 +3,9 @@ package com.project.sbs.api.requests;
 public class EditUserDetailsRequest {
     private String user_fullname;
 
+    public EditUserDetailsRequest() {
+    }
+
     public EditUserDetailsRequest(String user_fullname) {
         this.user_fullname = user_fullname;
     }

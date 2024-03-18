@@ -9,4 +9,5 @@ public interface AuthService {
     User getUserDetails(Integer userId);
     User getUserDetails(String userEmail);
     boolean userAlreadyExists(String userEmail);
+    Integer getUserIdIfTokenValid(String token);
 }
