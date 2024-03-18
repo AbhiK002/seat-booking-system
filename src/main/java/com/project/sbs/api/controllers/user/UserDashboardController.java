@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin
 @RequestMapping("/user")
+@CrossOrigin
 public class UserDashboardController {
     private AuthService authService;
     private UserDashboardService userDashboardService;
