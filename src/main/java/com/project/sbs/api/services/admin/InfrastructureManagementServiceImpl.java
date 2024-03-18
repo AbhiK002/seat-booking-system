@@ -56,10 +56,12 @@ public class InfrastructureManagementServiceImpl implements InfrastructureManage
 
     @Override
     public boolean floorExists(Integer office_id, Integer floor_number) {
-        if(floorRepository.getFloorsByFloorNumberAndOfficeId(floor_number,office_id).size()>0)
+        Office office = officeRepository.findById(office_id).orElse(null);
+        if(office==null)return false;
+        if(floorRepository.getFloorsByFloorNumberAndOfficeId(floor_number,office).size()>0)
         {
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 }

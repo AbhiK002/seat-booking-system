@@ -48,6 +48,7 @@ public class InfrastructureManagementSystem {
         }
 
         Floor floor =infrastructureManagementService.createFloor(Integer.parseInt(floorNumber) ,officeId);
+        if(floor==null)return new ErrorResponse("floor already exist ");
         return new CreateFloorResponse(floor,true);
     }
 
