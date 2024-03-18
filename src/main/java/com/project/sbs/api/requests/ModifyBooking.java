@@ -20,7 +20,7 @@ public class ModifyBooking {
         this.booking_id = booking_id;
     }
 
-    public boolean isAccepted() {
+    public boolean getAccepted() {
         return accepted;
     }
 

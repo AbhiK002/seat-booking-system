@@ -1,10 +1,8 @@
 package com.project.sbs.api.controllers.admin;
 
 import com.project.sbs.api.requests.ModifyBooking;
-import com.project.sbs.api.responses.AnyListResponse;
-import com.project.sbs.api.responses.SimpleResponse;
+import com.project.sbs.api.responses.*;
 import com.project.sbs.api.services.admin.AdminBookingService;
-import com.project.sbs.api.responses.BookingsListResponse;
 import com.project.sbs.database.entities.Booking;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,7 +31,8 @@ public class AdminDashboard {
             )
     {
         Booking booking=adminBookingService.modifyBooking(modifyBooking);
-        return new
+        if(booking ==null)return new ErrorResponse("Id invalid");
+        return new AnyObjectResponse<Booking>(booking,true);
     }
 
 }
