@@ -42,7 +42,7 @@ public class BookingController {
         return new AnyListResponse<Floor>(floors,true);
     }
 //
-    @GetMapping("/seats/{floor-id}")
+    @GetMapping("/seats/{floor_id}")
     public SimpleResponse getSeats(
             @RequestHeader("Authorization") String token,
             @PathVariable("floor_id") Integer floorId

@@ -38,7 +38,6 @@ public class UserBookingService {
     public List<Seat> getAllSeatsById(Integer floorId) {
         Floor floor=floorRepository.findById(floorId).orElse(null);
         if(floor==null)return null;
-
         return seatRepository.getSeatsBySeatFloorId(floor);
     }
 }
