@@ -13,10 +13,7 @@ import com.project.sbs.api.services.auth.JwtService;
 import com.project.sbs.config.response_components.UserData;
 import com.project.sbs.database.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class AuthController {
