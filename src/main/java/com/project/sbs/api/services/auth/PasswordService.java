@@ -12,6 +12,6 @@ public class PasswordService {
     }
 
     public boolean passwordMatchesHash(String password, String hashedPassword) {
-        return hashPassword(password).equals(hashedPassword);
+        return passwordEncoder.matches(password, hashedPassword);
     }
 }

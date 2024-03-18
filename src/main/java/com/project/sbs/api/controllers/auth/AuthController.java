@@ -1,5 +1,6 @@
 package com.project.sbs.api.controllers.auth;
 
+import com.project.sbs.api.requests.LoginRequest;
 import com.project.sbs.api.requests.RegisterRequest;
 import com.project.sbs.api.requests.VerifyEmailRequest;
 import com.project.sbs.api.responses.ErrorResponse;
@@ -14,6 +15,7 @@ import com.project.sbs.database.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -44,7 +46,7 @@ public class AuthController {
                 || user_password.isEmpty()
                 || user_otp.isEmpty()
         ) {
-            return new ErrorResponse("No empty fields allowed");
+            return new ErrorResponse("Empty fields are not allowed");
         }
 
         if (!emailService.isValidEmail(user_email)) {
@@ -62,12 +64,7 @@ public class AuthController {
         User newUser = authService.registerNewUser(user_fullname, user_email, user_password);
         if (newUser != null) {
             return new LoginSuccessfulResponse(
-                    new UserData(
-                            newUser.getUserId(),
-                            newUser.getUserFullname(),
-                            newUser.getUserEmail(),
-                            newUser.getUserRoles()
-                    ),
+                    new UserData(newUser),
                     jwtService.generateToken(newUser.getUserId()),
                     true
             );
@@ -90,5 +87,50 @@ public class AuthController {
         int OTP = emailService.generateOTP();
         emailService.sendEmail(email, OTP);
         return new SuccessBooleanResponse(true);
+    }
+
+    @PostMapping("/login")
+    public SimpleResponse login(
+            @RequestBody LoginRequest loginRequest
+    ) {
+        String user_email = loginRequest.getUser_email().trim();
+        String user_password = loginRequest.getUser_password();
+
+        if (user_password.isEmpty() || user_email.isEmpty()) {
+            return new ErrorResponse("Empty fields are not allowed");
+        }
+        if (!emailService.isValidEmail(user_email)) {
+            return new ErrorResponse("Invalid email");
+        }
+
+        System.out.println(user_email + " " + user_password);
+
+        User loggedInUser = authService.loginUser(user_email, user_password);
+        if (loggedInUser != null) {
+            return new LoginSuccessfulResponse(
+                new UserData(loggedInUser),
+                jwtService.generateToken(loggedInUser.getUserId()),
+                true
+            );
+        }
+        else {
+            return new ErrorResponse("Invalid credentials");
+        }
+    }
+
+    @PostMapping("/autologin")
+    public SimpleResponse autoLogin(@RequestHeader("Authorization") String token) {
+        if (jwtService.isTokenValid(token)) {
+            User loggedInUser = authService.getUserDetails(jwtService.getIdFromToken(token));
+
+            return new LoginSuccessfulResponse(
+                    new UserData(loggedInUser),
+                    token,
+                    true
+            );
+        }
+        else {
+            return new ErrorResponse("Login expired, please log in again");
+        }
     }
 }

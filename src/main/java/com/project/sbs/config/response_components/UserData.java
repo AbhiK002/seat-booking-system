@@ -1,5 +1,7 @@
 package com.project.sbs.config.response_components;
 
+import com.project.sbs.database.entities.User;
+
 public class UserData {
     private Integer user_id;
     private String user_fullname;
@@ -11,6 +13,10 @@ public class UserData {
         this.user_fullname = user_fullname;
         this.user_email = user_email;
         this.user_roles = user_roles;
+    }
+
+    public UserData(User user) {
+        this(user.getUserId(), user.getUserFullname(), user.getUserEmail(), user.getUserRoles());
     }
 
     public Integer getUser_id() {
