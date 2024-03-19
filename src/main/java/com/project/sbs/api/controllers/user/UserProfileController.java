@@ -9,6 +9,8 @@ import com.project.sbs.api.services.auth.AuthService;
 import com.project.sbs.api.services.auth.JwtService;
 import com.project.sbs.api.services.user.UserProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -25,55 +27,62 @@ public class UserProfileController {
     }
 
     @PatchMapping("/change-password")
-    public SimpleResponse changePassword(
+    public ResponseEntity<SimpleResponse> changePassword(
             @RequestHeader("Authorization") String token,
             @RequestBody ChangePasswordRequest changePasswordRequest
     ) {
         Integer userId = authService.getUserIdIfTokenValid(token);
         if (userId == null) {
-            return new ErrorResponse("Login expired, please login again");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new ErrorResponse("Login expired, please login again"));
         }
 
         String oldPassword = changePasswordRequest.getUser_old_password();
         String newPassword = changePasswordRequest.getUser_new_password();
 
         if (oldPassword == null || newPassword == null) {
-            return new ErrorResponse("Some error occurred (null)");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ErrorResponse("Some error occurred (null)"));
         }
 
         if (oldPassword.equals(newPassword)) {
-            return new ErrorResponse("New password cannot be Old password");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ErrorResponse("New password cannot be old password"));
         }
 
         boolean success = userProfileService.changePassword(userId, oldPassword, newPassword);
 
         if (!success) {
-            return new ErrorResponse("Wrong current password");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ErrorResponse("Wrong current password"));
         }
 
-        return new SuccessBooleanResponse(true);
+        return ResponseEntity.ok(new SuccessBooleanResponse(true));
     }
 
     @PatchMapping("/edit-details")
-    public SimpleResponse editDetails(
+    public ResponseEntity<SimpleResponse> editDetails(
             @RequestHeader("Authorization") String token,
             @RequestBody EditUserDetailsRequest editUserDetailsRequest
     ) {
         Integer userId = authService.getUserIdIfTokenValid(token);
         if (userId == null) {
-            return new ErrorResponse("Login expired, please login again");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new ErrorResponse("Login expired, please login again"));
         }
 
-        String user_fullname = editUserDetailsRequest.getUser_fullname();
+        String userFullname = editUserDetailsRequest.getUser_fullname();
 
-        if (user_fullname == null) {
-            return new ErrorResponse("Some error occurred (null)");
+        if (userFullname == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ErrorResponse("Some error occurred (null)"));
         }
 
-        boolean success = userProfileService.editDetails(userId, user_fullname.trim());
+        boolean success = userProfileService.editDetails(userId, userFullname.trim());
         if (!success) {
-            return new ErrorResponse("Some error occurred (user)");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ErrorResponse("Some error occurred (user)"));
         }
-        return new SuccessBooleanResponse(true);
+        return ResponseEntity.ok(new SuccessBooleanResponse(true));
     }
 }

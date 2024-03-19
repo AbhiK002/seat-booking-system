@@ -9,6 +9,8 @@ import com.project.sbs.database.entities.Booking;
 import com.project.sbs.database.entities.Cancellation;
 import com.project.sbs.database.entities.SwapRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,72 +29,66 @@ public class UserDashboardController {
     }
 
     @GetMapping("/bookings")
-    public SimpleResponse getBookings(
-            @RequestHeader("Authorization") String token
-    ) {
+    public ResponseEntity<SimpleResponse> getBookings(@RequestHeader("Authorization") String token) {
         Integer userId = authService.getUserIdIfTokenValid(token);
         if (userId == null) {
-            return new ErrorResponse("Login expired, please login again");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new ErrorResponse("Login expired, please login again"));
         }
 
         List<Booking> bookingsList = userDashboardService.getBookings(userId);
 
         if (bookingsList == null) {
-            return new ErrorResponse("Some error occurred (null)");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ErrorResponse("Some error occurred (null)"));
         }
 
-        return new AnyListResponse<Booking>(
-                bookingsList,
-                true
-        );
+        return ResponseEntity.ok(new AnyListResponse<>(bookingsList, true));
     }
 
     @GetMapping("/cancellations")
-    public SimpleResponse getCancellations(
-            @RequestHeader("Authorization") String token
-    ) {
+    public ResponseEntity<SimpleResponse> getCancellations(@RequestHeader("Authorization") String token) {
         Integer userId = authService.getUserIdIfTokenValid(token);
         if (userId == null) {
-            return new ErrorResponse("Login expired, please login again");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new ErrorResponse("Login expired, please login again"));
         }
 
         List<Cancellation> cancellationsList = userDashboardService.getCancellations(userId);
 
         if (cancellationsList == null) {
-            return new ErrorResponse("Some error occurred (null)");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ErrorResponse("Some error occurred (null)"));
         }
 
-        return new AnyListResponse<Cancellation>(
-                cancellationsList,
-                true
-        );
+        return ResponseEntity.ok(new AnyListResponse<>(cancellationsList, true));
     }
 
     @PostMapping("/cancellation")
-    public SimpleResponse makeCancellation(
+    public ResponseEntity<SimpleResponse> makeCancellation(
             @RequestHeader("Authorization") String token,
             @RequestBody CancellationRequest cancellationRequest
     ) {
         Integer userId = authService.getUserIdIfTokenValid(token);
         if (userId == null) {
-            return new ErrorResponse("Login expired, please login again");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new ErrorResponse("Login expired, please login again"));
         }
 
-        Integer booking_id = cancellationRequest.getBooking_id();
-        if (booking_id == null) {
-            return new ErrorResponse("Some error occurred (null)");
+        Integer bookingId = cancellationRequest.getBooking_id();
+        if (bookingId == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ErrorResponse("Booking ID is required"));
         }
 
-        Cancellation newCancellation = userDashboardService.makeCancellation(userId, booking_id);
+        Cancellation newCancellation = userDashboardService.makeCancellation(userId, bookingId);
 
         if (newCancellation == null) {
-            return new ErrorResponse("Some error occurred (refresh)");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ErrorResponse("Some error occurred (refresh)"));
         }
 
-        return new AnyObjectResponse<Cancellation>(
-                newCancellation,
-                true
-        );
+        return ResponseEntity.ok(new AnyObjectResponse<>(newCancellation, true));
     }
 
     @GetMapping("/incoming-swap-requests")
