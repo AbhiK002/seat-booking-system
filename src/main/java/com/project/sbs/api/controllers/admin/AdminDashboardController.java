@@ -4,8 +4,10 @@ import com.project.sbs.api.requests.ModifyBooking;
 import com.project.sbs.api.requests.ModifyCancellation;
 import com.project.sbs.api.responses.*;
 import com.project.sbs.api.services.admin.AdminBookingService;
+import com.project.sbs.api.services.admin.AdminVerificationService;
 import com.project.sbs.database.entities.Booking;
 import com.project.sbs.database.entities.Cancellation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,14 +16,21 @@ import java.util.List;
 @CrossOrigin
 public class AdminDashboardController {
     private final AdminBookingService adminBookingService;
+    private final AdminVerificationService adminVerificationService;
 
-    public AdminDashboardController(AdminBookingService adminBookingService) {
+    @Autowired
+    public AdminDashboardController(AdminBookingService adminBookingService, AdminVerificationService adminVerificationService) {
         this.adminBookingService = adminBookingService;
+        this.adminVerificationService = adminVerificationService;
     }
 
     @GetMapping("/bookings")
     public SimpleResponse getbookings(@RequestHeader("Authorization") String token)
     {
+        if(!adminVerificationService.isAdmin(token))
+        {
+            return new ErrorResponse("Unauthorised");
+        }
         List<Booking> bookings = adminBookingService.getAllPendingBookings();
 
         return new AnyListResponse<Booking>(bookings, true);
@@ -33,6 +42,10 @@ public class AdminDashboardController {
             @RequestBody ModifyBooking modifyBooking
             )
     {
+        if(!adminVerificationService.isAdmin(token))
+        {
+            return new ErrorResponse("Unauthorised");
+        }
         Booking booking=adminBookingService.modifyBooking(modifyBooking);
         if(booking ==null)return new ErrorResponse("Booking Id invalid");
         return new AnyObjectResponse<Booking>(booking,true);
@@ -41,6 +54,10 @@ public class AdminDashboardController {
     @GetMapping("/cancellations")
     public SimpleResponse getCancellations(@RequestHeader("Authorization") String token)
     {
+        if(!adminVerificationService.isAdmin(token))
+        {
+            return new ErrorResponse("Unauthorised");
+        }
         List<Cancellation> cancellations = adminBookingService.getAllPendingCancellations();
 
         return new AnyListResponse<Cancellation>(cancellations, true);
@@ -52,6 +69,10 @@ public class AdminDashboardController {
             @RequestBody ModifyCancellation modifyCancellation
     )
     {
+        if(!adminVerificationService.isAdmin(token))
+        {
+            return new ErrorResponse("Unauthorised");
+        }
         Cancellation cancellation=adminBookingService.modifyCancellation(modifyCancellation);
         if(cancellation ==null)return new ErrorResponse("Cancellation Id invalid");
         return new AnyObjectResponse<Cancellation>(cancellation,true);

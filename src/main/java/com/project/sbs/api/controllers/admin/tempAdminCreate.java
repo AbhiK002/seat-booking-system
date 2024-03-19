@@ -5,9 +5,7 @@ import com.project.sbs.api.services.auth.PasswordService;
 import com.project.sbs.database.entities.User;
 import com.project.sbs.database.repositories.UserRepository;
 import org.springframework.context.annotation.Bean;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class tempAdminCreate {
@@ -20,11 +18,26 @@ public class tempAdminCreate {
         this.passwordService = passwordService;
     }
 
-    @PostMapping("/admin")
-    public String createAdmin()
+    @PostMapping("/admin/create")
+    public String createAdmin(
+            @RequestHeader("Authorization") String secretCode,
+            @RequestParam("name") String adminName,
+            @RequestParam("email") String adminEmail,
+            @RequestBody String adminPassword
+    )
     {
-        String password= passwordService.hashPassword("admin123");
-        User admin=userRepository.save(new User(0,"Admin","admin@admin.com",password,"USER,ADMIN"));
+        if (!secretCode.equals("b&^Rv5b*&N(*Y(b^e$%#V5&rb*N")) {
+            return "Unauthorized";
+        }
+
+        String password= passwordService.hashPassword(adminPassword);
+        userRepository.save(new User(
+                0,
+                adminName,
+                adminEmail,
+                password,
+                "USER,ADMIN"
+        ));
         return "Admin created";
     }
 }
