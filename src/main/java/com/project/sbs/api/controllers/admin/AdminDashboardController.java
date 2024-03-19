@@ -8,6 +8,8 @@ import com.project.sbs.api.services.admin.AdminVerificationService;
 import com.project.sbs.database.entities.Booking;
 import com.project.sbs.database.entities.Cancellation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,56 +27,57 @@ public class AdminDashboardController {
     }
 
     @GetMapping("/bookings")
-    public SimpleResponse getbookings(@RequestHeader("Authorization") String token)
-    {
-        if(!adminVerificationService.isAdmin(token))
-        {
-            return new ErrorResponse("Unauthorised");
+    public ResponseEntity<SimpleResponse> getBookings(@RequestHeader("Authorization") String token) {
+        if (!adminVerificationService.isAdmin(token)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new ErrorResponse("Unauthorized"));
         }
         List<Booking> bookings = adminBookingService.getAllPendingBookings();
-
-        return new AnyListResponse<Booking>(bookings, true);
+        return ResponseEntity.ok(new AnyListResponse<>(bookings, true));
     }
 
+
     @PatchMapping("/modify-booking")
-    public SimpleResponse modifyBooking(
+    public ResponseEntity<SimpleResponse> modifyBooking(
             @RequestHeader("Authorization") String token,
             @RequestBody ModifyBooking modifyBooking
-            )
-    {
-        if(!adminVerificationService.isAdmin(token))
-        {
-            return new ErrorResponse("Unauthorised");
+    ) {
+        if (!adminVerificationService.isAdmin(token)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new ErrorResponse("Unauthorized"));
         }
-        Booking booking=adminBookingService.modifyBooking(modifyBooking);
-        if(booking ==null)return new ErrorResponse("Booking Id invalid");
-        return new AnyObjectResponse<Booking>(booking,true);
+        Booking booking = adminBookingService.modifyBooking(modifyBooking);
+        if (booking == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ErrorResponse("Booking ID invalid"));
+        }
+        return ResponseEntity.ok(new AnyObjectResponse<>(booking, true));
     }
 
     @GetMapping("/cancellations")
-    public SimpleResponse getCancellations(@RequestHeader("Authorization") String token)
-    {
-        if(!adminVerificationService.isAdmin(token))
-        {
-            return new ErrorResponse("Unauthorised");
+    public ResponseEntity<SimpleResponse> getCancellations(@RequestHeader("Authorization") String token) {
+        if (!adminVerificationService.isAdmin(token)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new ErrorResponse("Unauthorized"));
         }
         List<Cancellation> cancellations = adminBookingService.getAllPendingCancellations();
-
-        return new AnyListResponse<Cancellation>(cancellations, true);
+        return ResponseEntity.ok(new AnyListResponse<>(cancellations, true));
     }
 
     @PatchMapping("/modify-cancellation")
-    public SimpleResponse modifyCancellation(
+    public ResponseEntity<SimpleResponse> modifyCancellation(
             @RequestHeader("Authorization") String token,
             @RequestBody ModifyCancellation modifyCancellation
-    )
-    {
-        if(!adminVerificationService.isAdmin(token))
-        {
-            return new ErrorResponse("Unauthorised");
+    ) {
+        if (!adminVerificationService.isAdmin(token)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new ErrorResponse("Unauthorized"));
         }
-        Cancellation cancellation=adminBookingService.modifyCancellation(modifyCancellation);
-        if(cancellation ==null)return new ErrorResponse("Cancellation Id invalid");
-        return new AnyObjectResponse<Cancellation>(cancellation,true);
+        Cancellation cancellation = adminBookingService.modifyCancellation(modifyCancellation);
+        if (cancellation == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ErrorResponse("Cancellation ID invalid"));
+        }
+        return ResponseEntity.ok(new AnyObjectResponse<>(cancellation, true));
     }
 }
