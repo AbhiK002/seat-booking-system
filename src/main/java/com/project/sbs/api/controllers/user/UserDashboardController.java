@@ -1,14 +1,13 @@
 package com.project.sbs.api.controllers.user;
 
 import com.project.sbs.api.requests.CancellationRequest;
-import com.project.sbs.api.responses.AnyListResponse;
-import com.project.sbs.api.responses.AnyObjectResponse;
-import com.project.sbs.api.responses.ErrorResponse;
-import com.project.sbs.api.responses.SimpleResponse;
+import com.project.sbs.api.requests.ModifySwapRequest;
+import com.project.sbs.api.responses.*;
 import com.project.sbs.api.services.auth.AuthService;
 import com.project.sbs.api.services.user.UserDashboardService;
 import com.project.sbs.database.entities.Booking;
 import com.project.sbs.database.entities.Cancellation;
+import com.project.sbs.database.entities.SwapRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -95,4 +94,35 @@ public class UserDashboardController {
                 true
         );
     }
+
+    @GetMapping("/incoming-swap-requests")
+    public SimpleResponse getSwapRequests(
+            @RequestHeader("Authorization") String token
+    )
+    {
+        Integer userId = authService.getUserIdIfTokenValid(token);
+        if (userId == null) {
+            return new ErrorResponse("Login expired, please login again");
+        }
+
+        List<SwapRequest> swapRequests=userDashboardService.findAllSwapRequests(userId);
+        return new AnyListResponse<SwapRequest>(swapRequests,true);
+    }
+
+    @PostMapping("/modify-swap-request")
+    public SimpleResponse modifySwapRequest(
+            @RequestHeader("Authorization") String token,
+            @RequestBody ModifySwapRequest modifySwapRequest
+    )
+    {
+        Integer userId = authService.getUserIdIfTokenValid(token);
+        if (userId == null) {
+            return new ErrorResponse("Login expired, please login again");
+        }
+
+        SuccessBooleanResponse  result=userDashboardService.modifySwapRequest(modifySwapRequest);
+        if(result==null)return new ErrorResponse("Swap Request does not exists");
+        return result;
+    }
+
 }
