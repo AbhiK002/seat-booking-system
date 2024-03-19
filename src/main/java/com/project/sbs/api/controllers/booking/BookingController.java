@@ -108,7 +108,12 @@ public class BookingController {
                     .body(new ErrorResponse("Some error occurred (null)"));
         }
 
-        if (bookingPageService.isSeatBooked(seat_id)) {
+        Boolean isSeatBooked = bookingPageService.isSeatBooked(seat_id);
+        if (isSeatBooked == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ErrorResponse("Seat does not exist"));
+        }
+        if (isSeatBooked) {
             return ResponseEntity.status(HttpStatus.CONFLICT)
                     .body(new ErrorResponse("Seat already booked by another user"));
         }

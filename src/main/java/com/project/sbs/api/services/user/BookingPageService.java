@@ -65,9 +65,9 @@ public class BookingPageService {
         return swapRequestRepository.save(new SwapRequest(0,booking1,booking2));
     }
 
-    public boolean isSeatBooked(Integer seatId) {
+    public Boolean isSeatBooked(Integer seatId) {
         Seat seat = seatRepository.findById(seatId).orElse(null);
-        if (seat == null) return true; // assume the seat cannot be booked, since it doesn't exist
+        if (seat == null) return null; // assume the seat cannot be booked, since it doesn't exist
 
         return seat.getSeatBooked();
     }
