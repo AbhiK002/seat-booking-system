@@ -10,8 +10,4 @@ import java.util.List;
 
 public interface SeatRepository extends JpaRepository<Seat, Integer> {
     List<Seat> getSeatsBySeatFloorId(Floor seatFloorId);
-
-    @Query("select f from Seat f where f.seatFloorId= :floor ")
-    List<Booking> getAllSeatsByFloorId(Floor floor);
-
 }
