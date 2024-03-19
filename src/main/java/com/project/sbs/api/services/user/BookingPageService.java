@@ -1,15 +1,10 @@
 package com.project.sbs.api.services.user;
 
+import com.project.sbs.api.responses.ErrorResponse;
 import com.project.sbs.api.services.auth.AuthService;
 import com.project.sbs.config.enums.RequestStatus;
-import com.project.sbs.database.entities.Booking;
-import com.project.sbs.database.entities.Floor;
-import com.project.sbs.database.entities.Seat;
-import com.project.sbs.database.entities.User;
-import com.project.sbs.database.repositories.BookingRepository;
-import com.project.sbs.database.repositories.CancellationRepository;
-import com.project.sbs.database.repositories.FloorRepository;
-import com.project.sbs.database.repositories.SeatRepository;
+import com.project.sbs.database.entities.*;
+import com.project.sbs.database.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,15 +17,20 @@ public class BookingPageService {
     private CancellationRepository cancellationRepository;
     private FloorRepository floorRepository;
     private SeatRepository seatRepository;
+    private SwapRequestRepository swapRequestRepository;
+
 
     @Autowired
-    public BookingPageService(AuthService authService, BookingRepository bookingRepository, CancellationRepository cancellationRepository, FloorRepository floorRepository, SeatRepository seatRepository) {
+    public BookingPageService(AuthService authService, BookingRepository bookingRepository, CancellationRepository cancellationRepository, FloorRepository floorRepository, SeatRepository seatRepository, SwapRequestRepository swapRequestRepository) {
         this.authService = authService;
         this.bookingRepository = bookingRepository;
         this.cancellationRepository = cancellationRepository;
         this.floorRepository = floorRepository;
         this.seatRepository = seatRepository;
+        this.swapRequestRepository = swapRequestRepository;
     }
+
+
 
     public  List<Booking> getDetails(Integer floorId) {
          Floor floor=floorRepository.findById(floorId).orElse(null);
@@ -56,5 +56,12 @@ public class BookingPageService {
                 end_datetime,
                 RequestStatus.PENDING
         ));
+    }
+
+    public SwapRequest swapSeatRequest(Integer userId,Booking booking2)
+    {
+        User user=authService.getUserDetails(userId);
+        Booking booking1=bookingRepository.findBookingByUserId(user);
+        return swapRequestRepository.save(new SwapRequest(0,booking1,booking2));
     }
 }

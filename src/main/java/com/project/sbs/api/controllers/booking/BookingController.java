@@ -8,10 +8,7 @@ import com.project.sbs.api.responses.SimpleResponse;
 import com.project.sbs.api.services.auth.AuthService;
 import com.project.sbs.api.services.user.BookingPageService;
 import com.project.sbs.api.services.user.UserBookingService;
-import com.project.sbs.database.entities.Booking;
-import com.project.sbs.database.entities.Floor;
-import com.project.sbs.database.entities.Office;
-import com.project.sbs.database.entities.Seat;
+import com.project.sbs.database.entities.*;
 import com.project.sbs.database.repositories.OfficeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -125,5 +122,21 @@ public class BookingController {
         List<Booking> bookings=bookingPageService.getDetails(floorId);
         if(bookings==null)return new ErrorResponse("Floor does not exist ");
         return new AnyListResponse<Booking>(bookings,true);
+    }
+
+    @PostMapping("seat/swap")
+    public SimpleResponse createSwapRequest(
+            @RequestHeader("Authorization") String token,
+            @RequestBody Booking booking
+    )
+    {
+        Integer userId = authService.getUserIdIfTokenValid(token);
+        if (userId == null) {
+            return new ErrorResponse("Login expired, please login again");
+        }
+        SwapRequest swapRequest=bookingPageService.swapSeatRequest(userId, booking);
+        if(swapRequest==null)return new ErrorResponse("Invalid input");
+        return new AnyObjectResponse<SwapRequest>(swapRequest,true);
+
     }
 }
