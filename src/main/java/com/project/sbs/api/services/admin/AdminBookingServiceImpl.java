@@ -36,18 +36,23 @@ public class AdminBookingServiceImpl implements AdminBookingService {
     public Booking modifyBooking(ModifyBooking modifyBooking) {
         Booking booking =bookingRepository.findById(modifyBooking.getBooking_id()).orElse(null);
         if(booking==null)return null;
+        Seat seat=booking.getBookingSeatId();
         if(modifyBooking.getAccepted())
         {
             booking.setBookingStatus(RequestStatus.ACCEPTED);
-            Seat seat=booking.getBookingSeatId();
             seat.setSeatBooked(true);
             seatRepository.save(seat);
         }
         else
         {
             booking.setBookingStatus(RequestStatus.REJECTED);
+            return bookingRepository.save(booking);
         }
-        return bookingRepository.save(booking);
+        booking= bookingRepository.save(booking);
+
+        bookingRepository.updateByFloorId(seat);
+
+        return booking;
     }
 
     @Override
