@@ -53,7 +53,7 @@ public class UserProfileController {
         boolean success = userProfileService.changePassword(userId, oldPassword, newPassword);
 
         if (!success) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(new ErrorResponse("Wrong current password"));
         }
 

@@ -92,33 +92,35 @@ public class UserDashboardController {
     }
 
     @GetMapping("/incoming-swap-requests")
-    public SimpleResponse getSwapRequests(
+    public ResponseEntity<SimpleResponse> getSwapRequests(
             @RequestHeader("Authorization") String token
-    )
-    {
+    ) {
         Integer userId = authService.getUserIdIfTokenValid(token);
         if (userId == null) {
-            return new ErrorResponse("Login expired, please login again");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new ErrorResponse("Login expired, please login again"));
         }
 
-        List<SwapRequest> swapRequests=userDashboardService.findAllSwapRequests(userId);
-        return new AnyListResponse<SwapRequest>(swapRequests,true);
+        List<SwapRequest> swapRequests = userDashboardService.findAllSwapRequests(userId);
+        return ResponseEntity.ok(new AnyListResponse<>(swapRequests, true));
     }
 
     @PostMapping("/modify-swap-request")
-    public SimpleResponse modifySwapRequest(
+    public ResponseEntity<SimpleResponse> modifySwapRequest(
             @RequestHeader("Authorization") String token,
             @RequestBody ModifySwapRequest modifySwapRequest
-    )
-    {
+    ) {
         Integer userId = authService.getUserIdIfTokenValid(token);
         if (userId == null) {
-            return new ErrorResponse("Login expired, please login again");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new ErrorResponse("Login expired, please login again"));
         }
 
-        SuccessBooleanResponse  result=userDashboardService.modifySwapRequest(modifySwapRequest);
-        if(result==null)return new ErrorResponse("Swap Request does not exists");
-        return result;
+        SuccessBooleanResponse result = userDashboardService.modifySwapRequest(modifySwapRequest);
+        if (result == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ErrorResponse("Swap Request does not exist"));
+        }
+        return ResponseEntity.ok(result);
     }
-
 }
