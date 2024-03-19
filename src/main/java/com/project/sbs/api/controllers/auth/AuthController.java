@@ -125,8 +125,6 @@ public class AuthController {
             return new ErrorResponse("Invalid email");
         }
 
-        System.out.println(user_email + " " + user_password);
-
         User loggedInUser = authService.loginUser(user_email, user_password);
         if (loggedInUser != null) {
             return new LoginSuccessfulResponse(
