@@ -64,4 +64,11 @@ public class BookingPageService {
         Booking booking1=bookingRepository.findBookingByUserId(user);
         return swapRequestRepository.save(new SwapRequest(0,booking1,booking2));
     }
+
+    public boolean isSeatBooked(Integer seatId) {
+        Seat seat = seatRepository.findById(seatId).orElse(null);
+        if (seat == null) return true; // assume the seat cannot be booked, since it doesn't exist
+
+        return seat.getSeatBooked();
+    }
 }
