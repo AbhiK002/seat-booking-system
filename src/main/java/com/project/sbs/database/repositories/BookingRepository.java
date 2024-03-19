@@ -14,4 +14,7 @@ public interface BookingRepository extends JpaRepository<Booking,Integer> {
 
     @Query("select b from Booking b where b.bookingStatus = 'PENDING'")
     List<Booking> findAllPendingBookings();
+
+    @Query("select b from Booking b where b.bookingFloorId = :floorId")
+    List<Booking> getAllBookingsByFloorId(Floor floorId);
 }

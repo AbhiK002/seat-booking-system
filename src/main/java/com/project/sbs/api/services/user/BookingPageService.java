@@ -13,6 +13,8 @@ import com.project.sbs.database.repositories.SeatRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class BookingPageService {
     private AuthService authService;
@@ -28,6 +30,12 @@ public class BookingPageService {
         this.cancellationRepository = cancellationRepository;
         this.floorRepository = floorRepository;
         this.seatRepository = seatRepository;
+    }
+
+    public  List<Booking> getDetails(Integer floorId) {
+         Floor floor=floorRepository.findById(floorId).orElse(null);
+         if(floor==null)return null;
+         return bookingRepository.getAllBookingsByFloorId(floor);
     }
 
     public Booking bookSeat(Integer floor_id, Integer seat_id, Integer user_id, String start_datetime, String end_datetime) {
