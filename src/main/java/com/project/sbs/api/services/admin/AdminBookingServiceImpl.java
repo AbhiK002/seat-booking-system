@@ -5,8 +5,10 @@ import com.project.sbs.api.requests.ModifyCancellation;
 import com.project.sbs.config.enums.RequestStatus;
 import com.project.sbs.database.entities.Booking;
 import com.project.sbs.database.entities.Cancellation;
+import com.project.sbs.database.entities.Seat;
 import com.project.sbs.database.repositories.BookingRepository;
 import com.project.sbs.database.repositories.CancellationRepository;
+import com.project.sbs.database.repositories.SeatRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,11 +18,13 @@ import java.util.List;
 public class AdminBookingServiceImpl implements AdminBookingService {
     private final BookingRepository bookingRepository;
     private final CancellationRepository cancellationRepository;
+    private final SeatRepository seatRepository;
 
     @Autowired
-    public AdminBookingServiceImpl(BookingRepository bookingRepository, CancellationRepository cancellationRepository) {
+    public AdminBookingServiceImpl(BookingRepository bookingRepository, CancellationRepository cancellationRepository, SeatRepository seatRepository) {
         this.bookingRepository = bookingRepository;
         this.cancellationRepository = cancellationRepository;
+        this.seatRepository = seatRepository;
     }
 
     @Override
@@ -35,6 +39,9 @@ public class AdminBookingServiceImpl implements AdminBookingService {
         if(modifyBooking.getAccepted())
         {
             booking.setBookingStatus(RequestStatus.ACCEPTED);
+            Seat seat=booking.getBookingSeatId();
+            seat.setSeatBooked(true);
+            seatRepository.save(seat);
         }
         else
         {
