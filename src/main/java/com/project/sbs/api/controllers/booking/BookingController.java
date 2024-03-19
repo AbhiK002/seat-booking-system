@@ -11,6 +11,8 @@ import com.project.sbs.api.services.user.UserBookingService;
 import com.project.sbs.database.entities.*;
 import com.project.sbs.database.repositories.OfficeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,61 +33,69 @@ public class BookingController {
     }
 
     @GetMapping("/offices")
-    public SimpleResponse getOffices(
+    public ResponseEntity<SimpleResponse> getOffices(
             @RequestHeader("Authorization") String token)
     {
         Integer userId = authService.getUserIdIfTokenValid(token);
         if (userId == null) {
-            return new ErrorResponse("Login expired, please login again");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new ErrorResponse("Login expired, please login again"));
         }
 
-        List<Office> offices= userBookingService.getAllOffices();
-        return new AnyListResponse<Office>(offices,true);
+        List<Office> offices = userBookingService.getAllOffices();
+        return ResponseEntity.ok(new AnyListResponse<>(offices, true));
     }
+
 
     @GetMapping("/floors/{office-id}")
-    public SimpleResponse getFloors(
+    public ResponseEntity<SimpleResponse> getFloors(
             @RequestHeader("Authorization") String token,
             @PathVariable("office-id") Integer officeId
-            )
-    {
+    ) {
         Integer userId = authService.getUserIdIfTokenValid(token);
         if (userId == null) {
-            return new ErrorResponse("Login expired, please login again");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new ErrorResponse("Login expired, please login again"));
         }
 
-        List<Floor> floors= userBookingService.getAllFloorsWithOfficeId(officeId);
-        if(floors==null)return new ErrorResponse("office does not exists");
-        return new AnyListResponse<Floor>(floors,true);
+        List<Floor> floors = userBookingService.getAllFloorsWithOfficeId(officeId);
+        if (floors == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ErrorResponse("Office does not exist"));
+        }
+
+        return ResponseEntity.ok(new AnyListResponse<>(floors, true));
     }
-//
+
     @GetMapping("/seats/{floor_id}")
-    public SimpleResponse getSeats(
+    public ResponseEntity<SimpleResponse> getSeats(
             @RequestHeader("Authorization") String token,
             @PathVariable("floor_id") Integer floorId
     ) {
         Integer userId = authService.getUserIdIfTokenValid(token);
         if (userId == null) {
-            return new ErrorResponse("Login expired, please login again");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new ErrorResponse("Login expired, please login again"));
         }
 
         List<Seat> seats = userBookingService.getAllSeatsById(floorId);
         if (seats == null) {
-            return new ErrorResponse("Floor does not exist");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ErrorResponse("Floor does not exist"));
         } else {
-            System.out.println(seats);
-            return new AnyListResponse<Seat>(seats, true);
+            return ResponseEntity.ok(new AnyListResponse<>(seats, true));
         }
     }
 
     @PostMapping("/seat/book")
-    public SimpleResponse bookSeat(
+    public ResponseEntity<SimpleResponse> bookSeat(
             @RequestHeader("Authorization") String token,
             @RequestBody BookSeatRequest bookSeatRequest
-            ) {
+    ) {
         Integer userId = authService.getUserIdIfTokenValid(token);
         if (userId == null) {
-            return new ErrorResponse("Login expired, please login again");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new ErrorResponse("Login expired, please login again"));
         }
 
         Integer floor_id = bookSeatRequest.getFloor_id();
@@ -94,49 +104,53 @@ public class BookingController {
         String end_datetime = bookSeatRequest.getEnd_datetime();
 
         if (floor_id == null || seat_id == null || start_datetime == null || end_datetime == null) {
-            return new ErrorResponse("Some error occurred (null)");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ErrorResponse("Some error occurred (null)"));
         }
 
         Booking newBooking = bookingPageService.bookSeat(floor_id, seat_id, userId, start_datetime, end_datetime);
 
         if (newBooking == null) {
-            return new ErrorResponse("Some error occurred");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ErrorResponse("Some error occurred"));
         }
 
-        return new AnyObjectResponse<Booking>(
-                newBooking,
-                true
-        );
+        return ResponseEntity.ok(new AnyObjectResponse<>(newBooking, true));
     }
 
     @GetMapping("seat/details/{floor_id}")
-    public SimpleResponse getSeatDetails(
+    public ResponseEntity<SimpleResponse> getSeatDetails(
             @RequestHeader("Authorization") String token,
             @PathVariable("floor_id") Integer floorId
-    )
-    {
+    ) {
         Integer userId = authService.getUserIdIfTokenValid(token);
         if (userId == null) {
-            return new ErrorResponse("Login expired, please login again");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new ErrorResponse("Login expired, please login again"));
         }
-        List<Booking> bookings=bookingPageService.getDetails(floorId);
-        if(bookings==null)return new ErrorResponse("Floor does not exist ");
-        return new AnyListResponse<Booking>(bookings,true);
+        List<Booking> bookings = bookingPageService.getDetails(floorId);
+        if (bookings == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ErrorResponse("Floor does not exist"));
+        }
+        return ResponseEntity.ok(new AnyListResponse<>(bookings, true));
     }
 
     @PostMapping("seat/swap")
-    public SimpleResponse createSwapRequest(
+    public ResponseEntity<SimpleResponse> createSwapRequest(
             @RequestHeader("Authorization") String token,
             @RequestBody Booking booking
-    )
-    {
+    ) {
         Integer userId = authService.getUserIdIfTokenValid(token);
         if (userId == null) {
-            return new ErrorResponse("Login expired, please login again");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new ErrorResponse("Login expired, please login again"));
         }
-        SwapRequest swapRequest=bookingPageService.swapSeatRequest(userId, booking);
-        if(swapRequest==null)return new ErrorResponse("Invalid input");
-        return new AnyObjectResponse<SwapRequest>(swapRequest,true);
-
+        SwapRequest swapRequest = bookingPageService.swapSeatRequest(userId, booking);
+        if (swapRequest == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ErrorResponse("Invalid input"));
+        }
+        return ResponseEntity.ok(new AnyObjectResponse<>(swapRequest, true));
     }
 }
